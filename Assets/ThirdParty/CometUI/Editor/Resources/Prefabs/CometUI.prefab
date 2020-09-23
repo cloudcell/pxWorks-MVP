@@ -1,0 +1,198 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3819387651275994758
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3819387651275994756}
+  - component: {fileID: 3819387651275994759}
+  - component: {fileID: 1121424431586116624}
+  - component: {fileID: -9042975644637190900}
+  m_Layer: 0
+  m_Name: CometUI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3819387651275994756
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3819387651275994758}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3819387651275994759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3819387651275994758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a2b8fdddfdc9ea4db59f4066d09ddbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ReplayShowAnimation: 0
+  DestroyDynamicViews: 1
+  CloseAppOnBack: 0
+  BackGesture: 1
+  CancelCausesBack: 1
+  FullscreenFadePrefab: {fileID: 9044553112336250965, guid: c57a967a71c8b174ba44213f880cdb9e,
+    type: 3}
+  DialogWindowPrefab: {fileID: 7310602861640872182, guid: eb19894410099704cb7f2970ef3ff080,
+    type: 3}
+  DialogInputPrefab: {fileID: 2079708627159519439, guid: 407f33d95db566746a77114fcf14afad,
+    type: 3}
+  BackgroundSoundPrefab: {fileID: 4641807263278551472, guid: 657bd138f1176194aa596054c52ffda2,
+    type: 3}
+  OverlayCanvas: {fileID: 2783505717082534785, guid: bf7f98623af95bf43b981a44115a6918,
+    type: 3}
+  IconCreatorPrefab: {fileID: 8367832598050415786, guid: e3b307138e7749e4d85116fac88e819f,
+    type: 3}
+  TooltipViewPrefab: {fileID: 8808922059957461197, guid: b391fdf8bd61f664ead4cfcb1cf0a77c,
+    type: 3}
+  ShowAnimation: {fileID: 11400000, guid: e0666d1a4bbac6042bf58dd54367f79d, type: 2}
+  CloseAnimation: {fileID: 11400000, guid: d68a1040944b05e478989fbb90b4d537, type: 2}
+  HideAnimation: {fileID: 11400000, guid: d68a1040944b05e478989fbb90b4d537, type: 2}
+  ButtonSound: {fileID: 8300000, guid: 2c565c31e723da945a8ce97b5f859ccd, type: 3}
+  BackSwipeSound: {fileID: 8300000, guid: b9eb9a8e31497414290f6b5e1c6cfbcf, type: 3}
+  FadeVolume: 0.25
+  VolumeChangeSpeed: 1
+  UIGraph: {fileID: 0}
+--- !u!114 &1121424431586116624
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3819387651275994758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02155141d19849c42831ff3b4833f107, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Camera: {fileID: 0}
+  ZPos: 10
+  DontDestroy: 0
+  touchStrategy: 1
+  SimulateTouchWithMouse: 1
+  SimulateScaleWithMouseWheel: 1
+  MouseWheelSensitivity: 4
+  SwipeTolerance: 100
+  RotateTolerance: 10
+  ScaleTolerance: 1.1
+  TapMinTime: 0.02
+  LongTapTime: 0.5
+  DoubleTapTime: 0.3
+  PanInertion: 0.95
+  ScaleInertion: 0.94
+  RotateInertion: 0.95
+--- !u!82 &-9042975644637190900
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3819387651275994758}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4

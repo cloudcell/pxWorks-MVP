@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-16"?>
+<UserSettings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <LibraryPath>../Library</LibraryPath>
+  <ProjectFile>project.pxw</ProjectFile>
+  <InputMetaFileName>sockets_i.meta</InputMetaFileName>
+  <OutputMetaFileName>sockets_o.meta</OutputMetaFileName>
+  <PathsMetaFileName>paths.meta</PathsMetaFileName>
+  <RunMetaFileName>run.meta</RunMetaFileName>
+  <MetaKeyword>.meta</MetaKeyword>
+  <OutputGraphicsFolder>output.graphics</OutputGraphicsFolder>
+  <TempFolder>tmp.undo</TempFolder>
+  <MaxOutputGraphicsFilesCount>100</MaxOutputGraphicsFilesCount>
+</UserSettings>
