@@ -18,7 +18,8 @@ Documentation is currently provided at the website of the project: https://www.p
 
 Git repository: https://github.com/cloudcell/pxworks-mvp
 
-pxWorks developers can also be found on the IRC channel #pxworks, on the Freenode network (irc.freenode.net).
+pxWorks developers can also be found on the IRC channel #pxworks, on the Freenode network (irc.freenode.net),
+and in the Telegram channel [pxWorks](https://t.me/joinchat/CDhV7x2V7GXbg1uel_zjvw).
 
 ## Contributing
 
