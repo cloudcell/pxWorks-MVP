@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿// Copyright (c) 2020 Cloudcell Limited
+
+using UnityEngine;
 
 namespace uGraph
 {

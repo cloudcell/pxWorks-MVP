@@ -69,7 +69,7 @@ namespace GraphicsScene_UI
             LoadImage(files[index].FullName);
         }
 
-        HashSet<string> allowedFileExt = new HashSet<string> { ".png", ".svg" };
+        HashSet<string> allowedFileExt = new HashSet<string> { ".png" };
 
         void UpdateImage()
         {
@@ -145,31 +145,31 @@ namespace GraphicsScene_UI
 
             var ext = Path.GetExtension(FilePath).ToLower();
 
-            if (ext == ".svg")
-            {
-                ISVGDevice device;
-                //device = new SVGDeviceFast();
-                device = new SVGDeviceSmall();
-                var text = File.ReadAllText(FilePath);
-                var implement = new Implement(text, device);
-                var prevCulture = Thread.CurrentThread.CurrentCulture;
-                Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            //if (ext == ".svg")
+            //{
+            //    ISVGDevice device;
+            //    //device = new SVGDeviceFast();
+            //    device = new SVGDeviceSmall();
+            //    var text = File.ReadAllText(FilePath);
+            //    var implement = new Implement(text, device);
+            //    var prevCulture = Thread.CurrentThread.CurrentCulture;
+            //    Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
-                try
-                {
-                    implement.StartProcess();
-                    return implement.GetTexture();
-                }
-                catch(Exception ex)
-                {
-                    Debug.LogException(ex);
-                    return null;
-                }
-                finally
-                {
-                    Thread.CurrentThread.CurrentCulture = prevCulture;
-                }
-            }
+            //    try
+            //    {
+            //        implement.StartProcess();
+            //        return implement.GetTexture();
+            //    }
+            //    catch(Exception ex)
+            //    {
+            //        Debug.LogException(ex);
+            //        return null;
+            //    }
+            //    finally
+            //    {
+            //        Thread.CurrentThread.CurrentCulture = prevCulture;
+            //    }
+            //}
 
             // Load a PNG or JPG file from disk to a Texture2D
             // Returns null if load fails

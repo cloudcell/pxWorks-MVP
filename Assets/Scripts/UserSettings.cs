@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright (c) 2020 Cloudcell Limited
+
+using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
@@ -8,7 +10,7 @@ public class UserSettings
     public static UserSettings Instance;
 
     //public string ScriptExecuteCommandLine = @"""%0""";
-    //public string ScriptExecute = @"C:\Program Files\R\R-4.0.2\bin\Rscript.exe";
+    public string ExecutableFolderPath = "";
     public string LibraryPath = "../Library";
     public string ProjectFile = "project.pxw";
     //public string DefaultOutputFileName = "output.csv";

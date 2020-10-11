@@ -1,3 +1,5 @@
+// Copyright (c) 2020 Cloudcell Limited
+
 using System;
 using UnityEngine;
 using System.Collections.Generic;
@@ -8,15 +10,20 @@ using uGraph;
 using System.IO;
 using System.Linq;
 using System.Diagnostics;
+using Signals;
 
 namespace MainScene_UI
 {
     partial class TopToolBar : BaseView
     {
         [SerializeField] uGraph.Graph graph;
+        public static bool saveLogFile = false;
 
         private void Start()
         {
+            if (!Bus.EULA.Value)
+                Close();
+
             Bus.SetStatusLabel.Subscribe(this, s => Set(lbStatus, s));
             Bus.SceneChanged.Subscribe(this, Rebuild);
             Bus.SelectionChanged.Subscribe(this, (m) => Rebuild());
@@ -35,14 +42,18 @@ namespace MainScene_UI
             Subscribe(btWindowState, () => WindowStateController.Instance.ChangeWinState());
             Subscribe(btFullScreen, () => Screen.fullScreen = true);
             Subscribe(btTest, () => Test());
-            Subscribe(btCleanUp, ()=> CleanUp());
+            Subscribe(btCleanUp, () => CleanUp());
+            Subscribe(btDebug, () => { saveLogFile = !saveLogFile; btNew.Select(); });
 
-            Subscribe(btOpenGraphics, ()=> GraphicsWindowController.Instance.OpenGraphicsWindow());
+            Subscribe(btOpenGraphics, () => GraphicsWindowController.Instance.OpenGraphicsWindow());
 
             //
             Build();
 
             Application.quitting += Application_quitting;
+            Bus.EULA.Subscribe(this, (a) => { if (a) Show(null); }).CallWhenInactive();
+
+            SignalBase.LogSignals = saveLogFile;
         }
 
         private void OnSceneFilePathChanged()
@@ -135,10 +146,13 @@ namespace MainScene_UI
                     if (Screen.currentResolution.width != res.width || Screen.currentResolution.height != res.height)
                         Screen.SetResolution(res.width, res.height, true);
                 }
+
                 //Bus.SetStatusLabel += "" + Screen.height + " " + Screen.safeArea + " " + Screen.currentResolution.height;
                 //if (Screen.fullScreenMode == FullScreenMode.MaximizedWindow)
                 //    Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
                 //Bus.SetStatusLabel += "" + Screen.fullScreenMode;
+
+                SignalBase.LogSignals = saveLogFile;
             }
 
             if (Bus.RunnerState == RunnerState.Stop)
@@ -156,7 +170,24 @@ namespace MainScene_UI
                 else
                     colors.normalColor = new Color(1, 1, 1, 0);
                 btPause.colors = colors;
-            }           
+            }
+
+            {
+                var colors = btDebug.colors;
+                if (saveLogFile)
+                {
+                    colors.normalColor = Color.white;
+                    colors.selectedColor = new Color(1, 1, 1, 0.55f);
+                    colors.highlightedColor = new Color(1, 1, 1, 0.55f);
+                }
+                else
+                {
+                    colors.normalColor = new Color(1, 1, 1, 0);
+                    colors.selectedColor = new Color(1, 1, 1, 0.3f);
+                    colors.highlightedColor = new Color(1, 1, 1, 0.3f);
+                }
+                btDebug.colors = colors;
+            }
 
             //UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
         }

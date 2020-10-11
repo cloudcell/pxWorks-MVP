@@ -1,4 +1,6 @@
-﻿using CometUI;
+﻿// Copyright (c) 2020 Cloudcell Limited
+
+using CometUI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -233,6 +235,8 @@ namespace uGraph
         {
             HashSet<string> knownInputKnobs = new HashSet<string>();
             HashSet<string> knownOutputKnobs = new HashSet<string>();
+            List<Guid> orderOfKnobs = new List<Guid>();
+            var needSort = false;
 
             //add input knobs
             var inMetaFilePath = Path.Combine(sourceFolder, UserSettings.Instance.InputMetaFileName);
@@ -255,7 +259,12 @@ namespace uGraph
                         knob = GameObject.Instantiate(InputKnobPrefab, transform);
                         knob.Name = knobName;
                         knob.Id = Guid.NewGuid();
+                    }else
+                    {
+                        needSort = true;
                     }
+
+                    orderOfKnobs.Add(knob.Id);
 
                     //parse knob type
                     knob.Type = KnobType.data;
@@ -289,7 +298,12 @@ namespace uGraph
                         knob = GameObject.Instantiate(OutputKnobPrefab, transform);
                         knob.Name = knobName;
                         knob.Id = Guid.NewGuid();
+                    }else
+                    {
+                        needSort = true;
                     }
+
+                    orderOfKnobs.Add(knob.Id);
 
                     ////parse knob type
                     //if (parts.Length > 1)
@@ -313,6 +327,24 @@ namespace uGraph
 
                 DestroyImmediate(kn.gameObject);
             }
+
+            //sort knobs
+            if (needSort)
+                SortKnobs(orderOfKnobs);
+        }
+
+        private void SortKnobs(List<Guid> orderOfKnobs)
+        {
+            var knobs1 = GetComponentsInChildren<InputKnob>().Select(k => (k.transform, orderOfKnobs.IndexOf(k.Id)));
+            var knobs2 = GetComponentsInChildren<OutputKnob>().Select(k => (k.transform, orderOfKnobs.IndexOf(k.Id)));
+            var knobs = knobs1.Concat(knobs2).ToList();
+            if (knobs.Count == 0)
+                return;
+            var startIndex = knobs[0].Item1.GetSiblingIndex();
+            knobs.Sort((x, y) => x.Item2.CompareTo(y.Item2));
+
+            for (int i = 0; i < knobs.Count; i++)
+                knobs[i].Item1.SetSiblingIndex(startIndex + i);
         }
 
         #region IDraggable

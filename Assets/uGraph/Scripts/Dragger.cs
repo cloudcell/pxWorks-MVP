@@ -1,4 +1,6 @@
-﻿using CometUI;
+﻿// Copyright (c) 2020 Cloudcell Limited
+
+using CometUI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;

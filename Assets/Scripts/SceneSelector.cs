@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright (c) 2020 Cloudcell Limited
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

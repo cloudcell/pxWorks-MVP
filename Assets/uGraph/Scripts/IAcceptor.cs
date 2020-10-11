@@ -1,4 +1,6 @@
-﻿namespace uGraph
+﻿// Copyright (c) 2020 Cloudcell Limited
+
+namespace uGraph
 {
     public interface IAcceptor
     {

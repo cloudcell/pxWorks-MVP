@@ -1,4 +1,7 @@
-﻿using CometUI;
+﻿// Copyright (c) 2020 Cloudcell Limited
+
+using CometUI;
+using MainScene_UI;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -25,7 +28,21 @@ namespace uGraph
         List<Process> runningProcesses;
 
         //last exception of running
-        Exception lastRunException;
+        string _firstRunException;
+
+        string firstRunException
+        {
+            get => _firstRunException;
+
+            set
+            {
+                if (value == null)
+                    _firstRunException = value;
+                else
+                if (_firstRunException == null)
+                    _firstRunException = value;
+            }
+        }
 
         //queue of finished nodes
         Queue<(Node, Process, Exception)> queueToStop = new Queue<(Node, Process, Exception)>();
@@ -188,7 +205,9 @@ namespace uGraph
 
         private void Pr_OutputDataReceived(string data, Node node)
         {
-            UnityEngine.Debug.Log(node.Id + "> " + data);
+            if (TopToolBar.saveLogFile)
+                UnityEngine.Debug.Log(node.Id + "> " + data);
+
             Dispatcher.Enqueue(() => Bus.SetStatusLabel += node.Id + "> " + data);
         }
 
@@ -197,7 +216,7 @@ namespace uGraph
             //remove from run list
             runningNodes.Remove(node);
             //remember exception
-            lastRunException = ex;
+            firstRunException = "Node " + node.Id + Environment.NewLine + ex.Message;
             //
             node.SetState(NodeRunState.Exception);
             //stop
@@ -217,6 +236,28 @@ namespace uGraph
             var res = new RunData();
             if (lines.Length > 0) res.Executable = lines[0].Trim();
             if (lines.Length > 1) res.CommandLine = lines[1].Trim();
+
+            //adjust path to exe
+            if(!string.IsNullOrWhiteSpace(res.Executable))
+            {
+                if (!Path.IsPathRooted(res.Executable) &&
+                    !string.IsNullOrWhiteSpace(UserSettings.Instance.ExecutableFolderPath))
+                {
+                    var parts = UserSettings.Instance.ExecutableFolderPath.Trim().Split(';');
+                    foreach (var part in parts)
+                    {
+                        var fullPath = Path.Combine(UserSettings.Instance.ExecutableFolderPath, res.Executable);
+                        var dir = Path.GetDirectoryName(fullPath);
+                        var fileName = Path.GetFileName(fullPath);
+                        if (Directory.Exists(dir))
+                            if (Directory.GetFiles(dir, fileName + ".*").Length > 0)
+                            {
+                                res.Executable = fullPath;
+                                break;
+                            }
+                    }
+                }
+            }
 
             return res;
         }
@@ -255,7 +296,7 @@ namespace uGraph
                     //exception?
                     if (res.Item3 != null)
                     {
-                        lastRunException = res.Item3;
+                        firstRunException = "Node " + res.Item1?.Id + Environment.NewLine + res.Item3.Message;
                         //
                         res.Item1.SetState(NodeRunState.Exception);
                         //stop
@@ -284,10 +325,10 @@ namespace uGraph
             }
 
             //exception?
-            if (Bus.RunnerState == RunnerState.Stop && lastRunException != null)
+            if (Bus.RunnerState == RunnerState.Stop && firstRunException != null)
             {
-                UIManager.ShowDialog(null, lastRunException.Message, "Ok");
-                lastRunException = null;
+                UIManager.ShowDialog(null, firstRunException, "Ok");
+                firstRunException = null;
             }
 
             //completed?
@@ -366,7 +407,7 @@ namespace uGraph
             nodes = graph.NodesHolder.GetComponentsInChildren<Node>().ToList();
             readyNodes = new HashSet<Node>();
             runningNodes = new HashSet<Node>();
-            lastRunException = null;
+            firstRunException = null;
             runningProcesses = new List<Process>();
             queueToStop = new Queue<(Node, Process, Exception)>();
 

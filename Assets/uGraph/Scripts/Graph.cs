@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright (c) 2020 Cloudcell Limited
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -139,10 +141,10 @@ namespace uGraph
 
         private static void CleanUp(Node node)
         {
-            var names = node.GetComponents<InputKnob>().Select(k => k.Name.ToLower())
-                .Union(node.GetComponents<OutputKnob>().Select(k => k.Name.ToLower())).Distinct();
+            var names = node.GetComponentsInChildren<InputKnob>().Select(k => k.Name.ToLower())
+                .Union(node.GetComponentsInChildren<OutputKnob>().Select(k => k.Name.ToLower())).Distinct().ToList();
 
-            var files = Directory.GetFiles(node.ProjectDirectory).Where(f => names.Contains(Path.GetFileName(f).ToLower())).ToArray();
+            var files = Directory.GetFiles(node.ProjectDirectory).Where(f => names.Contains(Path.GetFileNameWithoutExtension(f).ToLower())).ToArray();
             foreach (var file in files)
             {
                 try

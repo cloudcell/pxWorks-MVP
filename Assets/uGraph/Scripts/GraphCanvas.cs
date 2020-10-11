@@ -1,4 +1,6 @@
-﻿using CometUI;
+﻿// Copyright (c) 2020 Cloudcell Limited
+
+using CometUI;
 using MainScene_UI;
 using System;
 using System.Diagnostics;

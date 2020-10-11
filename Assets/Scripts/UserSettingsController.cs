@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿// Copyright (c) 2020 Cloudcell Limited
+
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;

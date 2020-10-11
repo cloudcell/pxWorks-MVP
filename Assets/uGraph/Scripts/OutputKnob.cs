@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright (c) 2020 Cloudcell Limited
+
+using System;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;

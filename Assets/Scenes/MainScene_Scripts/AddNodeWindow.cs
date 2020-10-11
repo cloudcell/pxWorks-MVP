@@ -1,3 +1,5 @@
+// Copyright (c) 2020 Cloudcell Limited
+
 using System;
 using UnityEngine;
 using System.Collections.Generic;
