@@ -10,6 +10,7 @@ AppLinux/
 AppMac.app/
 Env/
 Backups/
+UnitySVG/
 
 # Visual Studio cache directory
 .vs/
