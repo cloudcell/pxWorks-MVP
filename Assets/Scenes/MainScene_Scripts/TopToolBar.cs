@@ -151,8 +151,6 @@ namespace MainScene_UI
                 //if (Screen.fullScreenMode == FullScreenMode.MaximizedWindow)
                 //    Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
                 //Bus.SetStatusLabel += "" + Screen.fullScreenMode;
-
-                SignalBase.LogSignals = saveLogFile;
             }
 
             if (Bus.RunnerState == RunnerState.Stop)
@@ -188,6 +186,8 @@ namespace MainScene_UI
                 }
                 btDebug.colors = colors;
             }
+
+            SignalBase.LogSignals = saveLogFile;
 
             //UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(null);
         }

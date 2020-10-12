@@ -168,7 +168,13 @@ namespace uGraph
             {
                 //read run data
                 var runData = ReadRunData(node);
-                var startInfo = new ProcessStartInfo(runData.Executable, runData.CommandLine);
+                var commandLine = runData.CommandLine ?? "";
+
+//#if !UNITY_STANDALONE_WIN
+//                if (!TopToolBar.saveLogFile)
+//                    commandLine += " >/dev/null 2>&1";//redirect output to null (for Linux platform)
+//#endif
+                var startInfo = new ProcessStartInfo(runData.Executable, commandLine);
                 startInfo.WorkingDirectory = node.ProjectDirectory;
                 startInfo.CreateNoWindow = true;
 
@@ -177,20 +183,20 @@ namespace uGraph
                 pr.EnableRaisingEvents = true;
                 pr.StartInfo = startInfo;
                 pr.Exited += (o, O) => OnProcessExited(node, pr);
-                var log = true;
-                if (log)
-                {
-                    startInfo.UseShellExecute = false;
-                    startInfo.RedirectStandardOutput = true;
-                    pr.OutputDataReceived += (_, d) => Pr_OutputDataReceived(d.Data, node);
-                }
+
+                startInfo.UseShellExecute = false;
+                startInfo.RedirectStandardOutput = true;
+                startInfo.RedirectStandardError = true;
+
+                pr.OutputDataReceived += (_, d) => Pr_OutputDataReceived(d.Data, node);
+                pr.ErrorDataReceived += (_, d) => Pr_OutputDataReceived(d.Data, node);
+
                 //
                 pr.Start();
-                //
-                if (log)
-                {
-                    pr.BeginOutputReadLine();
-                }
+
+                pr.BeginOutputReadLine();
+                pr.BeginErrorReadLine();
+
                 runningProcesses.Add(pr);
             }
             catch (FileNotFoundException ex)
@@ -205,6 +211,9 @@ namespace uGraph
 
         private void Pr_OutputDataReceived(string data, Node node)
         {
+            if (string.IsNullOrWhiteSpace(data))
+                return;
+
             if (TopToolBar.saveLogFile)
                 UnityEngine.Debug.Log(node.Id + "> " + data);
 
