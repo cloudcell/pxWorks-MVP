@@ -175,7 +175,7 @@ namespace uGraph
 //                    commandLine += " >/dev/null 2>&1";//redirect output to null (for Linux platform)
 //#endif
                 var startInfo = new ProcessStartInfo(runData.Executable, commandLine);
-                startInfo.WorkingDirectory = node.ProjectDirectory;
+                startInfo.WorkingDirectory = node.FullFolderPath;
                 startInfo.CreateNoWindow = true;
 
                 //start process
@@ -218,6 +218,11 @@ namespace uGraph
                 UnityEngine.Debug.Log(node.Id + "> " + data);
 
             Dispatcher.Enqueue(() => Bus.SetStatusLabel += node.Id + "> " + data);
+
+            if (Bus.SelectedNode.Value == null)
+                Dispatcher.Enqueue(() => Bus.SetStatusLabelSelectedNode += $"{node.Id}> {data}");
+            if (Bus.SelectedNode.Value == node)
+                Dispatcher.Enqueue(() => Bus.SetStatusLabelSelectedNode += data);
         }
 
         private void OnRunFailed(Node node, Exception ex)
@@ -240,7 +245,7 @@ namespace uGraph
 
         private RunData ReadRunData(Node node)
         {
-            var path = Path.Combine(node.ProjectDirectory, UserSettings.Instance.RunMetaFileName);
+            var path = Path.Combine(node.FullFolderPath, UserSettings.Instance.RunMetaFileName);
             var lines = File.ReadAllLines(path);
             var res = new RunData();
             if (lines.Length > 0) res.Executable = lines[0].Trim();
@@ -453,7 +458,7 @@ namespace uGraph
         //    return Directory.GetFiles(dir, UserSettings.Instance.ScriptSearchPattern).FirstOrDefault();
         //}
 
-        public string ProjectDirectory => Path.Combine(Graph.Instance.ProjectDirectory, Id.ToString());
+        public string FullFolderPath => Path.Combine(Graph.Instance.ProjectDirectory, FolderName.ToString());
 
         public int OutputDataVersion = 0;
     }

@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using uGraph;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ public class GraphicsWindowController : Singleton<GraphicsWindowController>
     private void Start()
     {
         Application.quitting += Application_quitting;
+        InvokeRepeating("RemoveOldGraphicFiles", 3, 3);
     }
 
     private void Application_quitting()
@@ -49,5 +51,30 @@ public class GraphicsWindowController : Singleton<GraphicsWindowController>
             graphicsProcess.Kill();
             graphicsProcess = null;
         }
+    }
+
+    void RemoveOldGraphicFiles()
+    {
+        if (Graph.Instance == null || Graph.Instance.ProjectDirectory == null)
+            return;
+
+        var folder = Path.Combine(Graph.Instance.ProjectDirectory, UserSettings.Instance.OutputGraphicsFolder);
+
+        if (!Directory.Exists(folder))
+            return;
+
+        //get list of files
+        var files = new DirectoryInfo(folder)
+            .GetFiles()
+            .OrderBy(f => f.LastWriteTime)
+            .ToArray();
+
+        //remove old files
+        for (int i = 0; i < files.Length - UserSettings.Instance.MaxOutputGraphicsFilesCount; i++)
+            try
+            {
+                File.Delete(files[i].FullName);
+            }
+            catch { }
     }
 }

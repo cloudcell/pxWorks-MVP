@@ -26,7 +26,7 @@ namespace uGraph
             set => headerText.text = value;
         }
 
-        public string OutputFilePath => Path.Combine(GetComponentInParent<Node>().ProjectDirectory, Name);
+        public string OutputFilePath => Path.Combine(GetComponentInParent<Node>().FullFolderPath, Name);
 
         public void OnConnectionChanged(bool hasInput)
         {

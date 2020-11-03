@@ -24,4 +24,6 @@ public class UserSettings
     public string OutputGraphicsFolder = "output.graphics";
     public string TempFolder = "tmp.undo";
     public int MaxOutputGraphicsFilesCount = 100;
+    public int MaxConsoleLines = 40;
+    public int ConsoleFontSize = 14;
 }

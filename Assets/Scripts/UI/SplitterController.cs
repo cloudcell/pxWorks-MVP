@@ -12,6 +12,7 @@ public class SplitterController : MonoBehaviour, IBeginDragHandler, IDragHandler
     [SerializeField] Vector2 hotSpotMouse = new Vector2(32, 32);
     [SerializeField] Vector2 MinSize = new Vector2(20, 20);
     [SerializeField] Vector2 MaxSize = new Vector2(1000, 1000);
+    [SerializeField] bool IsHorizontal;
 
     Vector3[] startSizes;
     bool isDragging;
@@ -39,7 +40,10 @@ public class SplitterController : MonoBehaviour, IBeginDragHandler, IDragHandler
         if (isDragging)
         {
             var delta = Input.mousePosition - startCursorPos;
-            delta.y = 0;
+            if (IsHorizontal)
+                delta.x = 0;
+            else
+                delta.y = 0;
             //if (Target)
             //{
             //    var scaler = GetComponentInParent<CanvasScaler>();
@@ -51,8 +55,16 @@ public class SplitterController : MonoBehaviour, IBeginDragHandler, IDragHandler
             {
                 var newSize = startSizes[i] + delta;
 
-                if (newSize.x < MinSize.x) delta.x -= newSize.x - MinSize.x;
-                if (newSize.x > MaxSize.x) delta.x -= newSize.x - MaxSize.x;
+                if (IsHorizontal)
+                {
+                    if (newSize.y < MinSize.y) delta.y -= newSize.y - MinSize.y;
+                    if (newSize.y > MaxSize.y) delta.y -= newSize.y - MaxSize.y;
+                }
+                else
+                {
+                    if (newSize.x < MinSize.x) delta.x -= newSize.x - MinSize.x;
+                    if (newSize.x > MaxSize.x) delta.x -= newSize.x - MaxSize.x;
+                }
 
                 IncreaseTargets[i].sizeDelta = startSizes[i] + delta;
             }

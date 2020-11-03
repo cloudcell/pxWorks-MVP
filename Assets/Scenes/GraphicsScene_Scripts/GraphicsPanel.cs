@@ -80,20 +80,10 @@ namespace GraphicsScene_UI
                 .OrderBy(f => f.LastWriteTime)
                 .ToArray();
 
-            //remove old files
-            for (int i = 0; i < files.Length - UserSettings.Instance.MaxOutputGraphicsFilesCount; i++)
-                try
-                {
-                    File.Delete(files[i].FullName);
-                }
-                catch { }
-
-            files = files.Skip(files.Length - UserSettings.Instance.MaxOutputGraphicsFilesCount).ToArray();
-
             //show last file
             var file = files.LastOrDefault();
 
-            if (file != null)
+            if (file != null && file.Exists)
             if (lastImageFileDate != file.LastWriteTime)
             {
                 try

@@ -30,7 +30,7 @@ namespace uGraph
             var rootFolder = Path.GetDirectoryName(filePath);
             foreach (var node in nodes)
             {
-                var targetFolder = Path.Combine(rootFolder, node.Id.ToString());
+                var targetFolder = Path.Combine(rootFolder, node.FolderName.ToString());
                 if (!Directory.Exists(targetFolder))
                     SaveNodeInFolder(node, targetFolder);
 
@@ -39,7 +39,7 @@ namespace uGraph
             }
 
             //remove old folders
-            var ids = new HashSet<string>(nodes.Select(n => n.Id.ToString()));
+            var ids = new HashSet<string>(nodes.Select(n => n.FolderName));
             foreach (var folder in Directory.GetDirectories(rootFolder).ToArray())
                 if (!Path.GetFileName(folder).Contains('.'))//skip output.graphics, etc
                 if (!ids.Contains(Path.GetFileName(folder)))
@@ -76,7 +76,7 @@ namespace uGraph
         {
             //check folder in .temp
             var rootFolder = Path.GetDirectoryName(dir);
-            var savedFolder = Path.Combine(rootFolder, UserSettings.Instance.TempFolder, node.Id.ToString());
+            var savedFolder = Path.Combine(rootFolder, UserSettings.Instance.TempFolder, node.FolderName.ToString());
             if (Directory.Exists(savedFolder))
             {
                 //copy from .temp
@@ -106,7 +106,7 @@ namespace uGraph
             {
                 if (knob.JoinedNode != null)
                 {
-                    var relativePath = ".." + Path.DirectorySeparatorChar + knob.JoinedNode.Id.ToString() + Path.DirectorySeparatorChar + knob.JoinedKnob.Name;
+                    var relativePath = ".." + Path.DirectorySeparatorChar + knob.JoinedNode.FolderName.ToString() + Path.DirectorySeparatorChar + knob.JoinedKnob.Name;
                     sb.AppendLine(relativePath);
                 }
                 else

@@ -31,6 +31,7 @@ namespace uGraph
                 return;
 
             var uis = SimpleGestures.GetUIObjectsUnderPosition(Input.mousePosition).Select(r => r.gameObject).ToArray();
+            Node selected = default;
 
             if (uis.All (ui => ui.GetComponentInParent<UnityEngine.UI.Button>() == null))
             if (uis.Contains(this.gameObject))
@@ -49,9 +50,12 @@ namespace uGraph
                     if (node != null)
                     {
                         node.Selected = true;
+                        selected = node;
                         //Bus.SetStatusLabel += "Id: " + node.Id.ToString();
                     }
                 }
+
+                Bus.SelectedNode.PublishIfChanged(selected);
                 Bus.SelectionChanged += true;
             }
         }
@@ -78,12 +82,16 @@ namespace uGraph
         {
             //EditNodeWindow.Instance.Build(node, false);
             //EditNodeWindow.Instance.Show(null);
-            Process.Start(node.ProjectDirectory);
+            Process.Start(node.FullFolderPath);
         }
 
         private void SimpleGestures_OnScale(float d)
         {
             if (UIManager.FullScreenFadeStack.Count > 0)
+                return;
+
+            var anyBaseView = SimpleGestures.GetUIObjectsUnderPosition(Input.mousePosition).Any(o => o.gameObject.GetComponent<BaseView>());
+            if (anyBaseView)
                 return;
 
             var forMe = SimpleGestures.GetUIObjectsUnderPosition(Input.mousePosition).Any(r => r.gameObject == gameObject);

@@ -11,4 +11,6 @@
   <OutputGraphicsFolder>output.graphics</OutputGraphicsFolder>
   <TempFolder>tmp.undo</TempFolder>
   <MaxOutputGraphicsFilesCount>100</MaxOutputGraphicsFilesCount>
+  <MaxConsoleLines>100</MaxConsoleLines>
+  <ConsoleFontSize>14</ConsoleFontSize>
 </UserSettings>

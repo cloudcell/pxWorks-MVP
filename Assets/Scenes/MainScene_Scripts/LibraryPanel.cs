@@ -8,6 +8,7 @@ using CometUI;
 using System.Linq;
 using System.IO;
 using System.Collections;
+using System.Diagnostics;
 
 namespace MainScene_UI
 {
@@ -25,6 +26,7 @@ namespace MainScene_UI
 
             //subscribe buttons or events here
             Subscribe(btRefresh, Rebuild);
+            Subscribe(btOpen, OpenInBrowser);
             vlg = GetComponentInChildren<VerticalLayoutGroup>();
 
             Build();
@@ -33,16 +35,18 @@ namespace MainScene_UI
             Bus.EULA.Subscribe(this, (a) => { if (a) { Show(null, noAnimation: true); Rebuild(); } }).CallWhenInactive();
         }
 
-        protected override void OnBuild(bool isFirstBuild)
+        private void OpenInBrowser()
         {
-            StartCoroutine(OnBuildAsync(isFirstBuild));
+            var path = UserSettings.Instance.LibraryPath;
+            if (!Path.IsPathRooted(path))
+                path = Path.Combine(Directory.GetCurrentDirectory(), path);
+            if (Directory.Exists(path))
+                Process.Start(path);
         }
 
-        private IEnumerator OnBuildAsync(bool isFirstBuild)
+        protected override void OnBuild(bool isFirstBuild)
         {
             DestroyDynamicallyCreatedChildren();
-
-            vlg.enabled = false;
 
             //get available scripts
             if (Directory.Exists(UserSettings.Instance.LibraryPath))
@@ -51,10 +55,6 @@ namespace MainScene_UI
 
             //Adjust visibility
             AdjustVisibility();
-
-            yield return new WaitForSeconds(0.5f);
-
-            vlg.enabled = true;
         }
 
         public void AdjustVisibility()
@@ -91,7 +91,7 @@ namespace MainScene_UI
                 var fi = Instantiate(FileItem);
                 fi.Build(dir, padding);
                 fi.Parent = parent;
-                fi.Show(this);
+                fi.Show(this, noAnimation: true);
             }
             else
             {
@@ -99,7 +99,7 @@ namespace MainScene_UI
                 var fi = Instantiate(FileItem);
                 fi.Build(dir, padding);
                 fi.Parent = parent;
-                fi.Show(this);
+                fi.Show(this, noAnimation: true);
                 //build subfolders
                 foreach (var sub in Directory.GetDirectories(dir))
                     Build(fi, sub, padding + 1);

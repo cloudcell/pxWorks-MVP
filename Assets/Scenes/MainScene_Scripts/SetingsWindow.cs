@@ -26,6 +26,17 @@ namespace MainScene_UI
             settings.OutputMetaFileName= GetString(ifOutputMetaFileName);
             settings.PathsMetaFileName= GetString(ifPathsMetaFileName);
             settings.RunMetaFileName= GetString(ifRunMetaFileName);
+            settings.ConsoleFontSize = GetInt(ifConsolefontSize);
+            settings.MaxConsoleLines = GetInt(ifConsoleMaxLines);
+            if (settings.ConsoleFontSize > 20)
+                settings.ConsoleFontSize = 20;
+            if (settings.ConsoleFontSize < 5)
+                settings.ConsoleFontSize = 5;
+            if (settings.MaxConsoleLines > 2000)
+                settings.MaxConsoleLines = 2000;
+            if (settings.MaxConsoleLines < 10)
+                settings.MaxConsoleLines = 10;
+            settings.MaxOutputGraphicsFilesCount = GetInt(ifMaxGraphicFilesCount);
 
             Bus.SaveUserSettings += true;
 
@@ -49,6 +60,9 @@ namespace MainScene_UI
                 Set(ifOutputMetaFileName, settings.OutputMetaFileName);
                 Set(ifPathsMetaFileName, settings.PathsMetaFileName);
                 Set(ifRunMetaFileName, settings.RunMetaFileName);
+                Set(ifConsolefontSize, settings.ConsoleFontSize.ToString());
+                Set(ifConsoleMaxLines, settings.MaxConsoleLines.ToString());
+                Set(ifMaxGraphicFilesCount, settings.MaxOutputGraphicsFilesCount.ToString());
             }
         }
         

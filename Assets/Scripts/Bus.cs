@@ -13,7 +13,11 @@ class Bus
     [HideInLog]
     public static Signal<string> SetStatusLabel;
     [HideInLog]
+    public static Signal<string> SetStatusLabelSelectedNode;
+    [HideInLog]
     public static Signal<object> SelectionChanged;
+    [HideInLog]
+    public static State<Node> SelectedNode;
     [HideInLog]
     public static Signal UpdateToolbars;
     public static Signal SaveUserSettings;

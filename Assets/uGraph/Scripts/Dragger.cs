@@ -70,6 +70,9 @@ namespace uGraph
         {
             if (UIManager.FullScreenFadeStack.Count > 0)
                 return;
+            var anyBaseView = SimpleGestures.GetUIObjectsUnderPosition(SimpleGestures.Instance.LastTouchedMousePos).Any(o => o.gameObject.GetComponent<BaseView>());
+            if (anyBaseView)
+                return;
 
             var obj = SimpleGestures.GetUIObjectsUnderPosition(SimpleGestures.Instance.LastTouchedMousePos).FirstOrDefault(o=>o.gameObject.GetComponent<IDraggable>() != null);
             if (obj.gameObject == null)

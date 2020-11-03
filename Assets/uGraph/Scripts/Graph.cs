@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace uGraph
@@ -14,6 +15,7 @@ namespace uGraph
     {
         public RectTransform LinesHolder;
         public RectTransform NodesHolder;
+        public RectTransform Center;
 
         public Node NodePrefab;
 
@@ -72,6 +74,11 @@ namespace uGraph
     {
         static Graph graph => Graph.Instance;
 
+        public static bool CheckNodeName(string name)
+        {
+            return Regex.IsMatch(name, @"^([a-zA-Z_][a-zA-Z\d_]*)$");
+        }
+
         public static void NewGraph()
         {
             graph.Clear();
@@ -128,6 +135,23 @@ namespace uGraph
             }
         }
 
+        internal static void CloneNode(Graph graph, Node source)
+        {
+            using (var command = new StateCommand("Clone node"))
+            {
+                var node = GameObject.Instantiate(graph.NodePrefab, graph.NodesHolder.transform);
+                node.Init();
+                node.transform.position = new Vector3(Screen.width / 2, Screen.height / 2);
+                node.HeaderText = source.HeaderText;
+                node.SourceLibraryFolder = source.SourceLibraryFolder;
+                node.RemoveKnobs();
+                node.AddKnobsFromSource(source.FullFolderPath);
+                SaverLoader.Save(Graph.Instance, Graph.Instance.SceneFilePath);
+                SaverLoader.CopyFilesRecursively(new DirectoryInfo(source.FullFolderPath), new DirectoryInfo(node.FullFolderPath), true);
+            }
+            Bus.SceneChanged += true;
+        }
+
         public static bool Is64Bit
         {
             get { return Marshal.SizeOf(typeof(IntPtr)) == 8; }
@@ -144,7 +168,7 @@ namespace uGraph
             var names = node.GetComponentsInChildren<InputKnob>().Select(k => k.Name.ToLower())
                 .Union(node.GetComponentsInChildren<OutputKnob>().Select(k => k.Name.ToLower())).Distinct().ToList();
 
-            var files = Directory.GetFiles(node.ProjectDirectory).Where(f => names.Contains(Path.GetFileNameWithoutExtension(f).ToLower())).ToArray();
+            var files = Directory.GetFiles(node.FullFolderPath).Where(f => names.Contains(Path.GetFileNameWithoutExtension(f).ToLower())).ToArray();
             foreach (var file in files)
             {
                 try
@@ -157,7 +181,7 @@ namespace uGraph
 
         private static void CleanUp_old(Node node)
         {
-            var files = Directory.GetFiles(node.ProjectDirectory).Where(f=>!Path.GetFileName(f).ToLower().Contains(UserSettings.Instance.MetaKeyword)).ToArray();
+            var files = Directory.GetFiles(node.FullFolderPath).Where(f=>!Path.GetFileName(f).ToLower().Contains(UserSettings.Instance.MetaKeyword)).ToArray();
 
             foreach(var file in files)
             {

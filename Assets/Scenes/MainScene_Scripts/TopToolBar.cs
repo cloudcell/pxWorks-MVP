@@ -44,6 +44,8 @@ namespace MainScene_UI
             Subscribe(btTest, () => Test());
             Subscribe(btCleanUp, () => CleanUp());
             Subscribe(btDebug, () => { saveLogFile = !saveLogFile; btNew.Select(); });
+            Subscribe(btCenter, CentreGraph);
+            Subscribe(btOpenLogFolder, OpenLogFolder);
 
             Subscribe(btOpenGraphics, () => GraphicsWindowController.Instance.OpenGraphicsWindow());
 
@@ -54,6 +56,56 @@ namespace MainScene_UI
             Bus.EULA.Subscribe(this, (a) => { if (a) Show(null); }).CallWhenInactive();
 
             SignalBase.LogSignals = saveLogFile;
+        }
+
+        private void OpenLogFolder()
+        {
+            var path = "";
+#if UNITY_STANDALONE_WIN
+            path = CombinePaths(Environment.GetEnvironmentVariable("AppData"), "..", "LocalLow", Application.companyName, Application.productName);
+            Process.Start(path);
+            return;
+#elif UNITY_STANDALONE_LINUX
+            path = CombinePaths(".config/unity3d", Application.companyName, Application.productName);
+            Process.Start($"/home/{Environment.UserName}/" + path);
+            return;
+#elif UNITY_STANDALONE_OSX
+            path = "Library/Logs/Unity";
+            Process.Start($"/home/{Environment.UserName}/" + path);
+            return;
+#endif
+        }
+
+        public static string CombinePaths(string path1, params string[] paths)
+        {
+            if (path1 == null)
+            {
+                throw new ArgumentNullException("path1");
+            }
+            if (paths == null)
+            {
+                throw new ArgumentNullException("paths");
+            }
+            return paths.Aggregate(path1, (acc, p) => Path.Combine(acc, p));
+        }
+
+        private void CentreGraph()
+        {
+            if (graph == null || graph.NodesHolder.childCount == 0)
+                return;
+
+            graph.transform.localScale = Vector3.one * 0.5f;
+
+            var bounds = new Bounds();
+            foreach (RectTransform node in graph.NodesHolder)
+            {
+                if (bounds.extents == Vector3.zero)
+                    bounds = new Bounds(node.position, new Vector3(100, 100));
+                else
+                    bounds.Encapsulate(new Bounds(node.position, new Vector3(100, 100)));
+            }
+
+            graph.transform.position -= (bounds.center - graph.Center.position);
         }
 
         private void OnSceneFilePathChanged()
@@ -250,6 +302,7 @@ namespace MainScene_UI
             SetActive(btTest, Application.isEditor);
             SetInteractable(btCleanUp, graph.DirectoryIsDefined);
             SetInteractable(btOpenGraphics, graph.DirectoryIsDefined);
+            SetInteractable(btCenter, graph.DirectoryIsDefined);
         }
     }
 }

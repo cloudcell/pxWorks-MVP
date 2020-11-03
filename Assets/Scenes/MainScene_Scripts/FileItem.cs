@@ -37,6 +37,11 @@ namespace MainScene_UI
                 UIManager.ShowDialog(null, "Project directory does not exist or is not defined." + Environment.NewLine + "Create new project.", "Ok");
                 return;
             }
+            if (!GraphHelper.CheckNodeName(Path.GetFileName(dir)))
+            {
+                UIManager.ShowDialog(null, "Spaces are not allowed in block names, please rename block before use.", "Ok");
+                return;
+            }
             GraphHelper.AddNode(Graph.Instance, dir);
         }
 

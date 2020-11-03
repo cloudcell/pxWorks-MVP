@@ -40,10 +40,44 @@ namespace uGraph
         public void RefreshNode()
         {
             Bus.ClosePopupMenu += true;
-            AddKnobsFromSource(ProjectDirectory);
+            AddKnobsFromSource(FullFolderPath);
 
             SaverLoader.Save(Graph.Instance, Graph.Instance.SceneFilePath);
             Bus.SceneChanged += true;
+        }
+
+        public void Rename()
+        {
+            Bus.ClosePopupMenu += true;
+
+            UIManager.ShowDialogInput(null, "Enter new name:", HeaderText, onClosed: (res) =>
+            {
+                if (string.IsNullOrWhiteSpace(res))
+                    return;
+
+                if (!GraphHelper.CheckNodeName(res))
+                {
+                    UIManager.ShowDialog(null, "Incorrect name", "Ok");
+                    return;
+                }
+
+                using (var command = new StateCommand("Rename node"))
+                {
+                    //rename
+                    var oldFolder = FullFolderPath;
+                    HeaderText = res;
+                    var newFolder = FullFolderPath;
+                    Directory.Move(oldFolder, newFolder);
+                }
+                //refresh
+                RefreshNode();
+            });
+        }
+
+        public void Clone()
+        {
+            Bus.ClosePopupMenu += true;
+            GraphHelper.CloneNode(Graph.Instance, this);
         }
 
         string GetProposedName(string name, int counter)
@@ -52,6 +86,8 @@ namespace uGraph
                 return name;
             return name + " " + counter;
         }
+
+        public string FolderName => HeaderText + "-" + Id;
 
         public void SaveNodeToLibrary()
         {
@@ -101,7 +137,7 @@ namespace uGraph
                     Directory.CreateDirectory(path);
                 }
                 //copy from library
-                var source = node.ProjectDirectory;
+                var source = node.FullFolderPath;
                 if (Directory.Exists(source))
                 {
                     SaverLoader.CopyFilesRecursively(new DirectoryInfo(source), new DirectoryInfo(path), true);
@@ -124,7 +160,7 @@ namespace uGraph
         public void OpenFolder()
         {
             Bus.ClosePopupMenu += true;
-            Process.Start(ProjectDirectory);
+            Process.Start(FullFolderPath);
         }
 
         public void Init()
@@ -154,6 +190,12 @@ namespace uGraph
         {
             get => headerText.text;
             set => headerText.text = value;
+        }
+
+        public void RemoveWithUndo()
+        {
+            using (var command = new StateCommand("Remove node"))
+                Remove();
         }
 
         internal void Remove()
