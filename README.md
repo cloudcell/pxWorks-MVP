@@ -2,15 +2,7 @@
 
 ## Quick Reference
 
-Location of log files of the platform https://docs.unity3d.com/Manual/LogFiles.html
-
-Setting $PATH variable on various platforms
-
-Linux https://stackoverflow.com/questions/14637979/how-to-permanently-set-path-on-linux-unix
-
-Windows https://www.computerhope.com/issues/ch000549.htm
-
-MacOS https://stackoverflow.com/questions/30461201/how-do-i-edit-path-bash-profile-on-osx#30462883
+After unpacking the released file it might be necessary to create a library folder whose location can be set in the settings.
 
 ## Resources
 
@@ -18,7 +10,7 @@ Documentation is currently provided at the website of the project: https://www.p
 
 Git repository: https://github.com/cloudcell/pxworks-mvp
 
-pxWorks developers can also be found on the IRC channel #pxworks, on the Freenode network (irc.freenode.net),
+pxWorks support can also be found on the IRC channel #pxworks, on the Freenode network (irc.freenode.net),
 and in the Telegram channel [pxWorks](https://t.me/joinchat/CDhV7x2V7GXbg1uel_zjvw).
 
 ## Contributing
