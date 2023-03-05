@@ -6,7 +6,7 @@ After unpacking the released file it might be necessary to create a library fold
 
 ## Resources
 
-Documentation is currently provided at the website of the project: https://www.pxworks.io/forum/
+Please read the [Wiki](https://github.com/cloudcell/pxWorks-MVP/wiki) for documentation. 
 
 Git repository: https://github.com/cloudcell/pxworks-mvp
 
